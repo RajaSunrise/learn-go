@@ -3,6 +3,8 @@
 [![Go](https://img.shields.io/badge/Go-1.2x-blue.svg)](https://golang.org/)
 [![Lisensi](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
+
+## Language [English](english.md🇬🇧) & [Indonesia🇮🇩](README.md)
 Selamat datang di panduan belajar komprehensif Bahasa Pemrograman Go (sering disebut Golang)! Dokumen ini bertujuan untuk menjadi sumber daya lengkap bagi siapa saja yang ingin mempelajari Go, mulai dari dasar-dasar hingga topik yang lebih lanjut. Go adalah bahasa pemrograman yang dikompilasi, diketik secara statis, yang dirancang di Google oleh Robert Griesemer, Rob Pike, dan Ken Thompson. Go dikenal karena kesederhanaannya, efisiensinya, dukungan konkurensi bawaan yang kuat, dan perkakas (tooling) yang hebat.
 
 Repositori ini (atau dokumen ini) berfungsi sebagai peta jalan dan kumpulan catatan/penjelasan untuk perjalanan belajar Go Anda.
