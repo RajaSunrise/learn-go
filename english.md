@@ -3,7 +3,7 @@
 [![Go](https://img.shields.io/badge/Go-1.2x-blue.svg)](https://golang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
-## Language [English🇬🇧](README.md) & [Indonesia🇮🇩](indonesia.md) <!-- Assuming you might move the Indonesian version -->
+## Language [English🇬🇧](README.md) & [Indonesia🇮🇩](README.md)
 Welcome to the comprehensive learning guide for the Go Programming Language (often called Golang)! This document aims to be a complete resource for anyone looking to learn Go, from the basics to more advanced topics. Go is a compiled, statically-typed programming language designed at Google by Robert Griesemer, Rob Pike, and Ken Thompson. Go is known for its simplicity, efficiency, strong built-in concurrency support, and great tooling.
 
 This repository (or document) serves as a roadmap and collection of notes/explanations for your Go learning journey.
