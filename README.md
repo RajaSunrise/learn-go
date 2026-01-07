@@ -1,6 +1,6 @@
 # Panduan Belajar Bahasa Pemrograman Go (Golang) Komprehensif
 
-[![Go](https://img.shields.io/badge/Go-1.2x-blue.svg)](https://golang.org/)
+[![Go](https://img.shields.io/badge/Go-1.25-blue.svg)](https://go.dev/)
 [![Lisensi](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 
@@ -1013,6 +1013,9 @@ func main() {
     */
 
     // 4. Bentuk `for range` (untuk iterasi slice, array, map, string, channel)
+    // Catatan (Go 1.22+): Variabel loop (index, value) dibuat baru di setiap iterasi.
+    // Ini memperbaiki masalah umum saat mengambil pointer ke variabel loop.
+
     // Slice
     items := []string{"apel", "pisang", "ceri"}
     fmt.Println("Iterasi Slice:")
@@ -3123,6 +3126,34 @@ Untuk setup/teardown yang kompleks (misalnya, koneksi database, server test):
     }
     ```
 
+#### 11.7. Fuzzing (Go 1.18+)
+Fuzzing adalah teknik pengujian otomatis yang secara terus-menerus memanipulasi input ke program Anda untuk menemukan bug (seperti buffer overflow, crash, atau hasil yang tidak valid).
+
+*   Fungsi fuzz dimulai dengan `Fuzz` dan menerima `*testing.F`.
+*   Gunakan `f.Add` untuk memberikan "seed corpus" (input contoh yang valid).
+*   Gunakan `f.Fuzz` yang menerima fungsi fuzz target.
+
+```go
+func FuzzReverse(f *testing.F) {
+    testcases := []string{"Hello, world", " ", "!12345"}
+    for _, tc := range testcases {
+        f.Add(tc) // Gunakan seed corpus
+    }
+
+    f.Fuzz(func(t *testing.T, orig string) {
+        rev := Reverse(orig)
+        doubleRev := Reverse(rev)
+        if orig != doubleRev {
+            t.Errorf("Before: %q, after: %q", orig, doubleRev)
+        }
+        if utf8.ValidString(orig) && !utf8.ValidString(rev) {
+            t.Errorf("Reverse produced invalid UTF-8 string %q", rev)
+        }
+    })
+}
+```
+Jalankan dengan `go test -fuzz=Fuzz`.
+
 ---
 
 ### 12. Pustaka Standar (Standard Library)
@@ -3283,7 +3314,45 @@ Setelah menguasai dasar-dasar ini, berikut beberapa area untuk eksplorasi lebih 
     *   `runtime/pprof`: Untuk profiling program dari dalam kode.
     *   `net/http/pprof`: Untuk profiling aplikasi web secara live.
     *   `go tool pprof`: Tool untuk menganalisis data profile.
-*   **Generics (Go 1.18+):** Pelajari cara menggunakan type parameters untuk menulis kode yang lebih fleksibel dan reusable tanpa mengorbankan type safety. Pahami kapan generics cocok digunakan.
+*   **Generics (Go 1.18+):** Generics memungkinkan penulisan fungsi dan struktur data yang dapat bekerja dengan berbagai tipe data tanpa mengorbankan keamanan tipe (type safety).
+    ```go
+    // Fungsi generic yang bekerja untuk tipe apa pun yang comparable
+    func Index[T comparable](s []T, x T) int {
+        for i, v := range s {
+            if v == x {
+                return i
+            }
+        }
+        return -1
+    }
+
+    // Struct generic
+    type List[T any] struct {
+        next *List[T]
+        val  T
+    }
+    ```
+*   **Context (`context`):** Paket `context` mendefinisikan tipe `Context`, yang membawa tenggat waktu (deadline), sinyal pembatalan (cancellation signals), dan nilai-nilai request-scoped lainnya melintasi batas API dan antar proses. Sangat krusial untuk aplikasi web dan microservices.
+    ```go
+    ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+    defer cancel()
+
+    select {
+    case <-time.After(200 * time.Millisecond):
+        fmt.Println("Overslept")
+    case <-ctx.Done():
+        fmt.Println(ctx.Err()) // context deadline exceeded
+    }
+    ```
+*   **Structured Logging (`log/slog`, Go 1.21+):** Paket baru untuk logging terstruktur yang cepat dan terstandarisasi.
+    ```go
+    import "log/slog"
+
+    slog.Info("memproses request",
+        "method", "GET",
+        "path", "/api/v1/user",
+        "user_id", 123)
+    ```
 *   **Web Frameworks:** Jelajahi framework populer seperti [Gin](https://github.com/gin-gonic/gin), [Echo](https://github.com/labstack/echo), [Chi](https://github.com/go-chi/chi), atau [Fiber](https://github.com/gofiber/fiber) untuk mempercepat pengembangan API dan aplikasi web. Pahami trade-off antara menggunakan framework vs. paket `net/http` standar.
 *   **Database/ORM:** Dalami `database/sql` dan drivernya. Pelajari library pembantu seperti `sqlx` atau ORM (Object-Relational Mapper) seperti [GORM](https://gorm.io/) atau [SQLBoiler](https://github.com/volatiletech/sqlboiler). Pahami pro dan kontra ORM.
 *   **gRPC:** Framework RPC (Remote Procedure Call) performa tinggi yang populer untuk komunikasi antar microservices. Go memiliki dukungan gRPC yang sangat baik.

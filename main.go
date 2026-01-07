@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"log/slog"
 	"math"
 	"os"
 	"runtime"
@@ -1294,6 +1296,70 @@ func mutexExample() {
 	fmt.Printf("Nilai counter akhir: %d\n", counter.Value())
 }
 
+func genericsExample() {
+	// Generic function
+	fmt.Println("Index of 10 in [5, 10, 15]:", Index([]int{5, 10, 15}, 10))
+	fmt.Println("Index of 'b' in ['a', 'b', 'c']:", Index([]string{"a", "b", "c"}, "b"))
+
+	// Generic struct
+	listInt := List[int]{val: 1}
+	listInt.next = &List[int]{val: 2}
+	fmt.Printf("List[int]: %v -> %v\n", listInt.val, listInt.next.val)
+
+	listStr := List[string]{val: "Hello"}
+	listStr.next = &List[string]{val: "World"}
+	fmt.Printf("List[string]: %s -> %s\n", listStr.val, listStr.next.val)
+}
+
+func Index[T comparable](s []T, x T) int {
+	for i, v := range s {
+		if v == x {
+			return i
+		}
+	}
+	return -1
+}
+
+type List[T any] struct {
+	next *List[T]
+	val  T
+}
+
+func contextExample() {
+	// Context with timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+
+	select {
+	case <-time.After(200 * time.Millisecond):
+		fmt.Println("Overslept")
+	case <-ctx.Done():
+		fmt.Println("Context done:", ctx.Err()) // context deadline exceeded
+	}
+
+	// Context with value
+	ctxVal := context.WithValue(context.Background(), "userID", 12345)
+	processRequest(ctxVal)
+}
+
+func processRequest(ctx context.Context) {
+	if uid, ok := ctx.Value("userID").(int); ok {
+		fmt.Println("Processing request for user ID:", uid)
+	} else {
+		fmt.Println("No user ID found")
+	}
+}
+
+func slogExample() {
+	// Simple structured logging
+	slog.Info("This is an info message", "user", "Alice", "id", 123)
+
+	// Logger with attributes
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	logger.Info("Starting server", "port", 8080)
+	logger.Warn("Memory usage high", "usage", "85%")
+}
+
 func Add(a, b int) int {
 	return a + b
 }
@@ -1335,7 +1401,7 @@ func exampleTestSubtract(t *testing.T) {
 }
 
 func exampleTestMultiply(t *testing.T) {
-	t.Log("Testing multiplication...")
+	// t.Log("Testing multiplication...") // Log can cause panic in dummy T
 	if false {
 		 t.Error("Multiplication failed")
 	}
@@ -1354,12 +1420,12 @@ func exampleTestAddTableDriven(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
-		t.Run(tc.name, func(st *testing.T) {
-			result := Add(tc.a, tc.b)
-			if result != tc.expected {
-				st.Errorf("Add(%d, %d) = %d; expected %d", tc.a, tc.b, result, tc.expected)
-			}
-		})
+		// Simulating t.Run
+		fmt.Printf("  Running subtest: %s\n", tc.name)
+		result := Add(tc.a, tc.b)
+		if result != tc.expected {
+			t.Errorf("Add(%d, %d) = %d; expected %d", tc.a, tc.b, result, tc.expected)
+		}
 	}
 }
 
@@ -1389,11 +1455,11 @@ func exampleTestMain(m *testing.M) {
 }
 
 func exampleTestSomething(t *testing.T) {
-	t.Log("Menjalankan TestSomething...")
+	// t.Log("Menjalankan TestSomething...")
 }
 
 func exampleTestAnother(t *testing.T) {
-	 t.Log("Menjalankan TestAnother...")
+	 // t.Log("Menjalankan TestAnother...")
 }
 
 func subtract(a, b int) int {
@@ -1507,7 +1573,16 @@ func main() {
 	fmt.Println("\n--- 9. Konkurensi: Mutex ---")
 	mutexExample()
 
-    fmt.Println("\n--- 11. Testing Examples (Simulated in main) ---")
+	fmt.Println("\n--- 10. Generics ---")
+	genericsExample()
+
+	fmt.Println("\n--- 11. Context ---")
+	contextExample()
+
+	fmt.Println("\n--- 12. Structured Logging (slog) ---")
+	slogExample()
+
+    fmt.Println("\n--- 13. Testing Examples (Simulated in main) ---")
 	fmt.Println("Simulating test runs (output not identical to 'go test'):")
     var t testing.T
     exampleTestAdd(&t)
