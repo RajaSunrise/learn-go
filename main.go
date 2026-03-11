@@ -467,6 +467,13 @@ func switchExample() {
 	}
 }
 
+func forRangeIntExample() {
+	fmt.Println("Iterasi Integer:")
+	for i := range 3 {
+		fmt.Printf("  Nilai i: %d\n", i)
+	}
+}
+
 func forLoopExample() {
 	sum := 0
 	for i := 0; i < 10; i++ {
@@ -1438,6 +1445,9 @@ func main() {
 	fmt.Println("\n--- 3. Dasar: Break/Continue ---")
 	breakContinueExample()
 
+	fmt.Println("\n--- 3. Dasar: For Range Integer ---")
+	forRangeIntExample()
+
 	fmt.Println("\n--- 3. Dasar: Defer (Simple) ---")
 	simpleDeferExample()
 
@@ -1509,19 +1519,19 @@ func main() {
 
     fmt.Println("\n--- 11. Testing Examples (Simulated in main) ---")
 	fmt.Println("Simulating test runs (output not identical to 'go test'):")
-    var t testing.T
-    exampleTestAdd(&t)
-    exampleTestSubtract(&t)
-    exampleTestMultiply(&t)
-    exampleTestAddTableDriven(&t)
+    // var t testing.T
+    // exampleTestAdd(&t)
+    // exampleTestSubtract(&t)
+    // exampleTestMultiply(&t)
+    // exampleTestAddTableDriven(&t)
     exampleExampleSayHello()
     exampleExampleSayGoodbye()
-    exampleTestSomething(&t)
-    exampleTestAnother(&t)
+    // exampleTestSomething(&t)
+    // exampleTestAnother(&t)
     fmt.Println("Benchmark simulation (no actual benchmark run):")
-    var b testing.B
-    exampleBenchmarkMyFunction(&b)
-    fmt.Println("(Note: TestMain would normally wrap all tests, not shown here)")
+    // var b testing.B
+    // exampleBenchmarkMyFunction(&b)
+    fmt.Println("(Note: Test functions are commented out here to avoid uninitialized *testing.T nil pointer dereferences. They are meant to be run via `go test`, not directly in main).")
 
 
 	fmt.Println("\n--- Selesai ---")
