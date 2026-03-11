@@ -1,6 +1,6 @@
 # Comprehensive Guide to Learning the Go Programming Language (Golang)
 
-[![Go](https://img.shields.io/badge/Go-1.2x-blue.svg)](https://golang.org/)
+[![Go](https://img.shields.io/badge/Go-1.26-blue.svg)](https://golang.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 ## Language [English🇬🇧](README.md) & [Indonesia🇮🇩](README.md)
@@ -198,8 +198,8 @@ Choose the installer package suitable for your operating system (Windows, macOS,
 *   **Linux:** Download the `.tar.gz` archive, extract it to `/usr/local` (or another preferred location), and add `/usr/local/go/bin` to your `PATH` environment variable.
     ```bash
     # Example for Linux (adjust version)
-    wget https://golang.org/dl/go1.21.0.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.0.linux-amd64.tar.gz
+    wget https://golang.org/dl/go1.26.0.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.26.0.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin # Add this to ~/.profile or ~/.bashrc
     source ~/.profile # or source ~/.bashrc
     ```
@@ -212,7 +212,7 @@ Open a new terminal or command prompt and run the following command:
 go version
 ```
 
-You should see output displaying the installed Go version, e.g., `go version go1.21.0 linux/amd64`.
+You should see output displaying the installed Go version, e.g., `go version go1.26.0 linux/amd64`.
 
 Also run:
 
@@ -1049,7 +1049,21 @@ func main() {
     for i, r := range "Go€" {
         fmt.Printf("  Byte index: %d, Rune: %c\n", i, r)
     }
+
+    // 5. `for range` over integers (Go 1.22+)
+    // Starting with Go 1.22, you can range over an integer directly.
+    // It will iterate from 0 to n-1.
+    fmt.Println("\nIterating Integer:")
+    for i := range 3 {
+        fmt.Printf("  Value i: %d\n", i)
+    }
     /* Output:
+      Value i: 0
+      Value i: 1
+      Value i: 2
+    */
+
+    /* Output of previous String Iteration:
       Byte index: 0, Rune: G
       Byte index: 1, Rune: o
       Byte index: 2, Rune: €
@@ -3265,7 +3279,7 @@ Since Go produces a single binary, deployment can be very simple:
     ```dockerfile
     # ---- Builder Stage ----
     # Use the official Go image as a builder
-    FROM golang:1.21-alpine AS builder
+    FROM golang:1.26-alpine AS builder
 
     # Set the working directory inside the container
     WORKDIR /app

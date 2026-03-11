@@ -1,6 +1,6 @@
 # Panduan Belajar Bahasa Pemrograman Go (Golang) Komprehensif
 
-[![Go](https://img.shields.io/badge/Go-1.2x-blue.svg)](https://golang.org/)
+[![Go](https://img.shields.io/badge/Go-1.26-blue.svg)](https://golang.org/)
 [![Lisensi](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
 
 
@@ -199,8 +199,8 @@ Pilih paket installer yang sesuai untuk sistem operasi Anda (Windows, macOS, Lin
 *   **Linux:** Unduh arsip `.tar.gz`, ekstrak ke `/usr/local` (atau lokasi pilihan lain), dan tambahkan `/usr/local/go/bin` ke variabel lingkungan `PATH` Anda.
     ```bash
     # Contoh untuk Linux (sesuaikan versi)
-    wget https://golang.org/dl/go1.21.0.linux-amd64.tar.gz
-    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.21.0.linux-amd64.tar.gz
+    wget https://golang.org/dl/go1.26.0.linux-amd64.tar.gz
+    sudo rm -rf /usr/local/go && sudo tar -C /usr/local -xzf go1.26.0.linux-amd64.tar.gz
     export PATH=$PATH:/usr/local/go/bin # Tambahkan ini ke ~/.profile atau ~/.bashrc
     source ~/.profile # atau source ~/.bashrc
     ```
@@ -213,7 +213,7 @@ Buka terminal atau command prompt baru dan jalankan perintah berikut:
 go version
 ```
 
-Anda seharusnya melihat output yang menampilkan versi Go yang terinstal, misalnya `go version go1.21.0 linux/amd64`.
+Anda seharusnya melihat output yang menampilkan versi Go yang terinstal, misalnya `go version go1.26.0 linux/amd64`.
 
 Jalankan juga:
 
@@ -1032,7 +1032,21 @@ func main() {
     for i, r := range "Go€" {
         fmt.Printf("  Index byte: %d, Rune: %c\n", i, r)
     }
+
+    // 5. Bentuk `for range` dengan integer (Go 1.22+)
+    // Mulai Go 1.22, Anda bisa menggunakan range pada integer secara langsung.
+    // Ini akan mengiterasi dari 0 hingga n-1.
+    fmt.Println("\nIterasi Integer:")
+    for i := range 3 {
+        fmt.Printf("  Nilai i: %d\n", i)
+    }
     /* Output:
+      Nilai i: 0
+      Nilai i: 1
+      Nilai i: 2
+    */
+
+    /* Output contoh Iterasi String sebelumnya:
       Index byte: 0, Rune: G
       Index byte: 1, Rune: o
       Index byte: 2, Rune: €
@@ -3221,7 +3235,7 @@ Karena Go menghasilkan single binary, deployment bisa sangat sederhana:
     ```dockerfile
     # ---- Builder Stage ----
     # Gunakan image Go resmi sebagai builder
-    FROM golang:1.21-alpine AS builder
+    FROM golang:1.26-alpine AS builder
 
     # Set working directory di dalam container
     WORKDIR /app
